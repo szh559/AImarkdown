@@ -1,42 +1,75 @@
-# AI-markdown
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+AI 增强版 Markdown 编辑器
+项目简介
+一款基于 Vue3 + Element Plus 开发、内置 AI 智能能力的在线 Markdown 编辑器，支持实时双栏编辑预览、AI 文案生成 / 润色 / 总结 / 代码优化，同时集成文件导入导出、自定义快捷键、标题快速插入、明暗主题切换、滚动同步、代码高亮、本地数据持久化等全套实用功能，界面简洁美观，适配日常笔记、文档写作、技术文案编写等场景。
+技术栈
+核心框架：Vue3（Composition API + Setup 语法糖）
+UI 组件库：Element Plus
+Markdown 解析：marked
+代码语法高亮：highlight.js
+快捷键管理：hotkeys-js
+网络请求：原生 Fetch（支持流式 SSE 响应）
+本地存储：LocalStorage
+样式适配：CSS 变量 暗黑 / 明亮主题
+✨ 核心功能亮点
+1. AI 智能增强功能
+🤖 AI 一键生成 Markdown 文案
+✍️ AI 内容润色、文字优化
+📝 文章自动总结、精简提炼
+💻 AI 代码解析、代码优化纠错
+⚡ 流式逐字输出，类 ChatGPT 实时打字效果
+❌ 异常请求捕获、内容失败自动回滚
+2. Markdown 编辑增强
+📑 快速插入 H1~H6 各级标题
+🔤 快捷加粗、斜体、链接等语法一键插入
+⌨️ 自定义全局快捷键，提高编辑效率
+📋 编辑器 + 预览区 双向滚动同步
+🧭 自动解析文档标题，生成大纲导航
+🖥️ 代码块多语言语法高亮
+3. 文件操作功能
+📥 本地 .md 文件导入编辑
+📤 编辑内容一键导出为 Markdown 文件
+自动命名导出文件，带时间标识
+4. 主题与体验
+🌓 一键切换 暗黑模式 / 明亮模式
+主题配置本地持久化，刷新不重置
+全局样式自适应，视觉风格统一
+编辑内容自动本地缓存，刷新页面不丢失
+5. 其他优化
+输入防抖解析，避免高频输入卡顿
+接口请求异常容错、友好弹窗提示
+组件化拆分，代码低耦合易维护
+严格单向数据流，状态管理清晰
+📦 安装运行
+1. 克隆项目
+bash
+运行
+git clone 你的仓库地址
+cd 项目文件夹
+2. 安装依赖
+bash
+运行
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+3. 本地启动
+bash
+运行
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
+4. 项目打包
+bash
+运行
 npm run build
-```
+🎯 使用说明
+启动项目后左侧为编辑区、右侧为实时预览区；
+可使用顶部快捷按钮快速插入标题、加粗、斜体等语法；
+支持自定义快捷键编辑，提升写作效率；
+点击 AI 功能按钮，可对内容进行生成、润色、总结、代码优化；
+支持本地 MD 文件导入编辑，编辑完成可一键导出；
+右上角可一键切换 明亮 / 暗黑 主题，自动记忆偏好设置；
+编辑内容自动存入本地缓存，刷新页面内容不丢失。
+📌 项目优化点（特色加分）
+采用防抖 + 缓存优化 Markdown 高频解析性能，减少无效计算；
+滚动事件加节流 + 同步锁，解决双栏滚动死循环问题；
+使用 AbortController 管控 AI 请求，防止多次请求冲突；
+基于 CSS 变量实现主题无缝切换，适配代码高亮样式；
+封装通用工具方法、拆分业务组件，高内聚低耦合，便于后续扩展维护。
+📄 开源协议
+本项目基于 MIT 协议开源，可免费学习、二次开发及个人使用，禁止商用倒卖。
