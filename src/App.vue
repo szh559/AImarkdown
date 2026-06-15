@@ -5,6 +5,7 @@
       {{ dark ? "☀️" : "🌙" }}
     </el-button>
     <div class="left">
+      <AIActions :content="mdContent" @update="mdContent = $event"></AIActions>
       <!-- 数据改变拿数据并且计算HTML 并且传回去（在本地储存的时候用） -->
       <Editor
         @jump="handJump"
@@ -12,6 +13,7 @@
         :content="mdContent"
         ref="editorRef"
         @scroll="handleEditorScroll"
+        style="flex: 1; min-height: 0"
       />
     </div>
     <!-- 给预览区传解析好的HTML -->
@@ -42,6 +44,7 @@ import { marked } from "marked";
 import { computed, onMounted, ref, nextTick } from "vue";
 import Editor from "./components/Editor.vue";
 import Preview from "./components/Preview.vue";
+import AIActions from "./components/AIActions.vue";
 
 const mdContent = ref(""); //Markdown原文，整个项目的唯一数据源
 const dark = ref(false); //黑夜模式
@@ -209,7 +212,7 @@ const handlePreviewScroll = () => {
 
 //处理大纲跳转
 const handJump = (lineIndex) => {
-  console.log(lineIndex);
+  // console.log(lineIndex);
 
   //获取编辑区滚动元素
   const editorDom = getScrollDom(editorRef.value);
@@ -300,12 +303,13 @@ onMounted(() => {
   padding-top: 15px;
   border-right: 3px black solid;
   margin-left: 8px;
+  display: flex;
+  flex-direction: column;
 }
 .left,
 .right {
-  width: 50%; /* 各占 50% 宽度 */
-  height: 100%; /* 确保高度撑满 */
-  overflow: hidden;
+  width: 50%;
+  height: 100%;
   position: relative;
 }
 </style>
