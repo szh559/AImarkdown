@@ -14,18 +14,21 @@ const renderer = new Renderer();
 // 重写 code 方法以支持 highlight.js
 // 修复：参数改为解构对象 { text, lang, escaped }
 renderer.code = ({ text, lang, escaped }) => {
-  // 1. 验证语言是否支持，不支持则回退到 plaintext
-  const validLang = lang && hljs.getLanguage(lang) ? lang : "plaintext";
+  let highlighted;
 
-  // 2. 执行高亮
-  // 注意：hljs.highlight 第一个参数是代码内容(text)，第二个是配置对象
-  const highlighted = hljs.highlight(text, { language: validLang }).value;
+  if (lang && hljs.getLanguage(lang)) {
+    // 语言已注册 → 直接高亮
+    highlighted = hljs.highlight(text, { language: lang }).value;
+  } else {
+    // 语言未注册（如 Vue/TS 等）→ 自动检测，不降级为白板
+    const result = hljs.highlightAuto(text);
+    highlighted = result.value;
+  }
 
-  // 3. 返回包裹好的 HTML，添加必要的 class 以便 CSS 定位
-  return `<pre><code class="hljs language-${validLang}">${highlighted}</code></pre>`;
+  return `<pre><code class="hljs">${highlighted}</code></pre>`;
 };
 
-// 配置 marked
+// 配置 marked 插件，添加自定义的渲染规则
 marked.use({
   gfm: true, // 开启 GitHub 风格 Markdown
   breaks: true, // 允许回车换行

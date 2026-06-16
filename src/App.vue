@@ -39,8 +39,9 @@
 
 <script setup>
 import { ElMessage } from "element-plus";
-import { mdToHtml } from "./utils/mdParse";
 import { marked } from "marked";
+//这个会执行配置 marked 插件，添加自定义的渲染规则
+import { mdToHtml } from "./utils/mdParse";
 import { computed, onMounted, ref, nextTick } from "vue";
 import Editor from "./components/Editor.vue";
 import Preview from "./components/Preview.vue";
@@ -151,63 +152,32 @@ const getScrollDom = (componentRef) => {
   }
 };
 
-//编辑区滚动 -> 同步给预览区
-const handleEditorScroll = () => {
+//处理同步滚动的函数
+const handleScroll = (zdDom, bdDom) => {
+  //先检查元素是否存在（必须在上锁之前，否则会死锁）
+  if (!zdDom || !bdDom) return;
   //如果被上锁了 证明有一边的回调在调用
   if (isSyncing.value) return;
-
-  isSyncing.value = true; //上锁
-
-  //获取编辑区滚动元素
-  const editorDom = getScrollDom(editorRef.value);
-
-  //获取预览区滚动元素
-  const previewDom = getScrollDom(previewRef.value);
-
-  //如果两个元素都找到了
-  if (editorDom && previewDom) {
-    // 计算编辑区的滚动比例
-    const ratio =
-      editorDom.scrollTop / (editorDom.scrollHeight - editorDom.clientHeight);
-    // 设置预览区的滚动位置
-    previewDom.scrollTop =
-      ratio * (previewDom.scrollHeight - previewDom.clientHeight);
-  }
-
+  //上锁
+  isSyncing.value = true;
+  //计算主动滚动区的比例
+  const ratio = zdDom.scrollTop / (zdDom.scrollHeight - zdDom.clientHeight);
+  // 设置被动滚动区的滚动位置
+  bdDom.scrollTop = ratio * (bdDom.scrollHeight - bdDom.clientHeight);
+  //解锁
   nextTick(() => {
-    //解锁
     isSyncing.value = false;
   });
 };
 
+//编辑区滚动 -> 同步给预览区
+const handleEditorScroll = () => {
+  handleScroll(getScrollDom(editorRef.value), getScrollDom(previewRef.value));
+};
+
 //预览区滚动 -> 同步给编辑区
 const handlePreviewScroll = () => {
-  //如果被上锁了 证明有一边的回调在调用
-  if (isSyncing.value) return;
-
-  isSyncing.value = true; //上锁
-
-  //获取编辑区滚动元素
-  const editorDom = getScrollDom(editorRef.value);
-
-  //获取预览区滚动元素
-  const previewDom = getScrollDom(previewRef.value);
-
-  //如果两个元素都找到了
-  if (editorDom && previewDom) {
-    // 计算预览区的滚动比例
-    const ratio =
-      previewDom.scrollTop /
-      (previewDom.scrollHeight - previewDom.clientHeight);
-    // 设置编辑区的滚动位置
-    editorDom.scrollTop =
-      ratio * (editorDom.scrollHeight - editorDom.clientHeight);
-  }
-
-  nextTick(() => {
-    //解锁
-    isSyncing.value = false;
-  });
+  handleScroll(getScrollDom(previewRef.value), getScrollDom(editorRef.value));
 };
 
 //处理大纲跳转
@@ -289,7 +259,7 @@ onMounted(() => {
 /* 👇 新增：按钮定位样式 */
 .theme-btn {
   position: fixed;
-  top: 20px;
+  top: 15px;
   right: 20px;
   z-index: 9999;
 }
@@ -301,15 +271,19 @@ onMounted(() => {
 }
 .left {
   padding-top: 15px;
-  border-right: 3px black solid;
+  border-right: 3px solid var(--el-border-color);
   margin-left: 8px;
   display: flex;
   flex-direction: column;
 }
-.left,
-.right {
+.left {
   width: 50%;
   height: 100%;
   position: relative;
+}
+.right {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

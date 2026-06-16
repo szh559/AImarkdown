@@ -122,7 +122,7 @@ const jumpCon = (line) => {
 /* 大纲容器 — 定位样式 */
 .Nav {
   position: fixed;
-  top: 92px;
+  top: 115.5px;
   left: 8px;
   width: 255px;
   height: calc(100vh - 100px);
@@ -141,6 +141,10 @@ const jumpCon = (line) => {
   padding: 10px 0;
   margin: 0;
 }
+.outline-list h3 {
+  text-align: center;
+  font-size: 20px;
+}
 .outline-item {
   white-space: nowrap;
   overflow: hidden;
@@ -157,7 +161,7 @@ const jumpCon = (line) => {
 .level-1 {
   font-size: 16px;
   font-weight: bold;
-  padding-left: 10px;
+  padding-left: 13px;
   color: #2c3e50;
 }
 .level-2 {
